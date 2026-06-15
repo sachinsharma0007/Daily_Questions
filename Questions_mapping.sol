@@ -88,7 +88,44 @@ contract Mapping_Practice{
         return (Students[Roll_no].name, Students[Roll_no].marks);   
     }
 
+    mapping(uint => mapping(address => bool)) public attendance;
 
+    function Mark_attendance(uint classID) public {
+        require(attendance[classID][msg.sender] == false, "Already Marked");
+        attendance[classID][msg.sender] = true;
+    }
+    function Check_attendance(uint classID) public view returns(bool) {
+        return attendance[classID][msg.sender];
+    }
 
-    
+    mapping(address => uint) public tokenBalance;
+
+    function MintToken(uint amount) public {
+        tokenBalance[msg.sender] += amount;
+    }
+    function Check_balance(address _address) public view returns(uint) {
+        return tokenBalance[_address];
+    }
+
+    function TransferToken(address receiver, uint amount) public {
+        require(tokenBalance[msg.sender] > amount,"Insufficient balance");
+
+        tokenBalance[msg.sender] -= amount;
+        tokenBalance[receiver] += amount;
+    }
+
+    mapping(address => mapping(address => uint)) public allowance;
+
+    function approve(address spender, uint amount) public {
+        allowance[msg.sender][spender] = amount;
+    }
+
+    function checkAllowance(address owner, address spender)public view returns(uint) {
+        return allowance[owner][spender];
+    }
+
+    function spendAllowance(address owner, uint amount) public {
+        require( allowance[owner][msg.sender] >= amount,"Not enough allowance");
+        allowance[owner][msg.sender] -= amount;
+    }
 }
