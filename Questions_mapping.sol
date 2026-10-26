@@ -124,5 +124,8 @@ contract Mapping_Practice{
         return allowance[owner][spender];
     }
 
-    
+    function spendAllowance(address owner, uint amount) public {
+        require( allowance[owner][msg.sender] >= amount,"Not enough allowance");
+        allowance[owner][msg.sender] -= amount;
+    }
 }
